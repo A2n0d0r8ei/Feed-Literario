@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Literatura Brasileira — Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<!--
+╔══════════════════════════════════════════════════════════════╗
+║           LITERATURA BRASILEIRA — FEED INTERATIVO           ║
+║                 Projeto 3° Ano EMTI · 2025                  ║
+╠══════════════════════════════════════════════════════════════╣
+║  ONDE VOCÊS DEVEM MEXER:                                    ║
+║  ✅ Seção "DADOS DO PERFIL" (perfil do escritor)            ║
+║  ✅ Seção "DESTAQUES" (conteúdo dos modais)                 ║
+║  ✅ Seção "STORIES" (imagens e vídeos)                      ║
+║  ✅ Seção "POSTS DO FEED" (imagens e legendas)              ║
+║  ✅ Hashtags nas .post-tags                                 ║
+║  ✅ Comentários nos posts                                   ║
+║                                                             ║
+║  ONDE NÃO MEXER (a não ser que saibam o que estão fazendo): ║
+║  ❌ Variáveis CSS no :root e nos [data-theme]               ║
+║  ❌ Funções JavaScript (openStory, openHighlight, etc.)     ║
+║  ❌ Estrutura dos modais (.modal-overlay, .modal-box)       ║
+║  ❌ Sistema de temas (.theme-bar, setTheme)                 ║
+║  ❌ Responsividade (@media queries)                         ║
+╚══════════════════════════════════════════════════════════════╝
+-->
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     BARRA DE TEMAS — NÃO EDITAR
+     ══════════════════════════════════════════════════════════ -->
+<div class="theme-bar">
+  <span class="theme-bar-title">📚 Literatura Brasileira | Feed Literário</span>
+  <div class="theme-btns">
+    <button class="theme-btn active" onclick="setTheme('claro', this)">☀️ Claro</button>
+    <button class="theme-btn" onclick="setTheme('noite', this)">🌙 Noite</button>
+    <button class="theme-btn" onclick="setTheme('verde', this)">🌿 Verde</button>
+    <button class="theme-btn" onclick="setTheme('azul', this)">🌊 Azul</button>
+  </div>
+</div>
+
+<div class="insta-wrapper">
+
+  <!-- ══════════════════════════════════════════════════════════
+       ✅ DADOS DO PERFIL — EDITE AQUI
+       Preencha com as informações do escritor escolhido
+       ══════════════════════════════════════════════════════════ -->
+  <div class="profile-header">
+    <div class="profile-top">
+      <div class="profile-avatar">
+        <div class="profile-avatar-inner" id="profile-avatar-content">
+          <!--
+            ✅ FOTO DO ESCRITOR:
+            Substitua o emoji abaixo por:
+            <img src="URL_DA_FOTO" alt="Nome do Escritor">
+            
+            Dica: busque a foto no Wikimedia Commons (gratuito e sem direitos autorais)
+            Exemplo: <img src="https://upload.wikimedia.org/..." alt="Machado de Assis">
+          -->
+          📖
+        </div>
+      </div>
+
+      <div class="profile-stats">
+        <div class="stat">
+          <!--
+            ✅ Atualize este número conforme a quantidade de posts que vocês criarem
+          -->
+          <span class="stat-num" id="stat-posts">3</span>
+          <span class="stat-label">publicações</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">—</span><!-- Deixe como curiosidade ou coloque um número fictício divertido -->
+          <span class="stat-label">seguidores</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">—</span>
+          <span class="stat-label">seguindo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-info">
+      <!--
+        ✅ NOME COMPLETO DO ESCRITOR
+        Exemplo: Machado de Assis
+      -->
+      <div class="profile-name" id="profile-name">Nome do Escritor</div>
+
+      <!--
+        ✅ PERÍODO LITERÁRIO E DATAS
+        Exemplo: Realismo · 1839 – 1908
+      -->
+      <div class="profile-period" id="profile-period">Período Literário · Ano nascimento – Ano falecimento</div>
+
+      <!--
+        ✅ MINI BIOGRAFIA
+        Escreva 2-3 linhas sobre o escritor: geração, estilo, principais contribuições.
+        Use emojis para deixar mais dinâmico!
+      -->
+      <div class="profile-bio" id="profile-bio">
+        ✍️ Breve descrição do escritor: geração, estilo, principais contribuições.<br>
+        📍 Cidade / Estado natal
+      </div>
+
+      <!--
+        ✅ LINK DA OBRA PRINCIPAL
+        Pode ser um link para a obra no Domínio Público (domíniopublico.gov.br)
+        ou para a página do escritor na Academia Brasileira de Letras
+        Exemplo: <a href="https://..." class="profile-link" id="profile-link">📖 Dom Casmurro (1899)</a>
+      -->
+      <a href="#" class="profile-link" id="profile-link">🔗 Obra principal ou obra mais conhecida</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ✅ STORIES — EDITE AQUI
+       Cada story-item abre um modal com a mídia em tela cheia.
+       Você pode usar imagens estáticas ou vídeos curtos.
+       ══════════════════════════════════════════════════════════ -->
+  <div class="stories-section">
+    <div class="stories-section-label">Stories</div>
+    <div class="stories-bar">
+      <div class="stories-inner" id="stories-container">
+
+        <!--
+          ══════════════════════════════════════════════
+          COMO ADICIONAR UM STORY:
+
+          <div class="story-item" onclick="openStory(this)"
+               data-media="URL_DA_IMAGEM_OU_VIDEO"
+               data-type="image"     (ou "video")
+               data-caption="Legenda que aparece embaixo da mídia"
+               data-label="Rótulo abaixo do círculo">
+            <div class="story-ring">
+              <div class="story-inner">
+                COLOQUE UMA MINIATURA AQUI:
+                <img src="URL_MINIATURA" alt="...">
+                OU um emoji representativo
+              </div>
+            </div>
+            <span class="story-label">Rótulo</span>
+          </div>
+
+          DICAS:
+          - data-type="image"  → para fotos (jpg, png, webp)
+          - data-type="video"  → para vídeos curtos (mp4)
+          - O story some automaticamente após 5 segundos
+          - Toque/clique na metade direita para avançar
+          - Toque/clique na metade esquerda para voltar
+          ══════════════════════════════════════════════
+        -->
+
+        <!-- STORY 1 -->
+        <div class="story-item" onclick="openStory(this)"
+             data-media=""
+             data-type="image"
+             data-caption="✅ Coloque aqui a legenda do story — ex: 'Capa da obra Dom Casmurro, 1899'"
+             data-label="Story 1">
+          <div class="story-ring">
+            <div class="story-inner">
+              <!--
+                ✅ MINIATURA DO STORY 1
+                Substitua o emoji por: <img src="URL_DA_IMAGEM" alt="...">
+                E preencha data-media="" com a URL da imagem ou vídeo completo
+              -->
+              📸
+            </div>
+          </div>
+          <span class="story-label">Story 1</span>
+        </div>
+
+        <!-- STORY 2 -->
+        <div class="story-item" onclick="openStory(this)"
+             data-media=""
+             data-type="image"
+             data-caption="✅ Legenda do story 2"
+             data-label="Story 2">
+          <div class="story-ring">
+            <div class="story-inner">📷</div>
+          </div>
+          <span class="story-label">Story 2</span>
+        </div>
+
+        <!-- STORY 3 -->
+        <div class="story-item" onclick="openStory(this)"
+             data-media=""
+             data-type="image"
+             data-caption="✅ Legenda do story 3"
+             data-label="Story 3">
+          <div class="story-ring">
+            <div class="story-inner">🎬</div>
+          </div>
+          <span class="story-label">Story 3</span>
+        </div>
+
+        <!--
+          ✅ Para adicionar mais stories, copie um bloco acima e cole aqui
+        -->
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ✅ DESTAQUES — EDITE AQUI
+       Cada destaque abre um modal com conteúdo rico.
+       Clique em cada um para ver o exemplo de estrutura.
+       ══════════════════════════════════════════════════════════ -->
+  <div class="highlights-section">
+    <div class="highlights-label">Destaques</div>
+    <div class="highlights-bar">
+
+      <!-- DESTAQUE: OBRAS -->
+      <div class="highlight-item" onclick="openHighlight('obras')">
+        <div class="highlight-ring">
+          <!--
+            ✅ CAPA DO DESTAQUE "OBRAS"
+            Substitua o emoji por: <img src="URL_DA_IMAGEM" alt="Obras">
+          -->
+          🖊️
+        </div>
+        <span class="highlight-label">Obras</span>
+      </div>
+
+      <!-- DESTAQUE: VIDA -->
+      <div class="highlight-item" onclick="openHighlight('vida')">
+        <div class="highlight-ring">🏛️</div>
+        <span class="highlight-label">Vida</span>
+      </div>
+
+      <!-- DESTAQUE: FRASES -->
+      <div class="highlight-item" onclick="openHighlight('frases')">
+        <div class="highlight-ring">💬</div>
+        <span class="highlight-label">Frases</span>
+      </div>
+
+      <!-- DESTAQUE: CONTEXTO HISTÓRICO -->
+      <div class="highlight-item" onclick="openHighlight('contexto')">
+        <div class="highlight-ring">📜</div>
+        <span class="highlight-label">Contexto</span>
+      </div>
+
+      <!-- DESTAQUE: PRÊMIOS E LEGADO -->
+      <div class="highlight-item" onclick="openHighlight('legado')">
+        <div class="highlight-ring">🏆</div>
+        <span class="highlight-label">Legado</span>
+      </div>
+
+      <!--
+        ✅ Para adicionar mais destaques, copie um bloco acima e:
+        1. Mude o onclick para openHighlight('minha-secao')
+        2. Adicione o conteúdo do modal na seção de MODAIS DE DESTAQUE abaixo
+      -->
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ✅ FEED DE POSTS — EDITE AQUI
+       ══════════════════════════════════════════════════════════ -->
+  <div class="posts-feed">
+
+    <!-- ══════════════════════════════════════════════════════════
+         POST 1
+         ══════════════════════════════════════════════════════════ -->
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-avatar">
+          <div class="post-avatar-inner">
+            <!--
+              ✅ FOTO DO ESCRITOR NO POST (pequena)
+              Substitua por: <img src="URL_DA_FOTO" alt="Nome">
+              Ou use a inicial do nome: M (para Machado, por ex.)
+            -->
+            ?
+          </div>
+        </div>
+        <div class="post-user-info">
+          <div class="post-username">
+            <!--
+              ✅ USERNAME e PERÍODO LITERÁRIO
+              Exemplo: @machadodeassis
+            -->
+            @usuario_do_escritor
+            <span class="periodo-badge">Período</span><!-- ex: Realismo, Romantismo, Modernismo... -->
+          </div>
+          <!--
+            ✅ LOCALIZAÇÃO E ANOS
+            Exemplo: Rio de Janeiro, RJ · 1839–1908
+          -->
+          <div class="post-location">Cidade, Estado · Período (anos)</div>
+        </div>
+        <div class="post-menu">···</div>
+      </div>
+
+      <!--
+        ✅ IMAGEM DO POST 1
+        Substitua todo este bloco por:
+        <img src="URL_DA_IMAGEM" alt="Descrição" class="post-image">
+
+        Sugestões de imagem para o 1° post:
+        - Retrato do escritor
+        - Capa da obra principal
+        - Ilustração do período literário
+      -->
+      <div class="post-image-placeholder">
+        <div class="post-image-placeholder-content">
+          <div class="placeholder-icon">🖼️</div>
+          <div class="placeholder-text">Imagem do Post 1</div>
+          <div class="placeholder-hint">&lt;img src="url" class="post-image"&gt;</div>
+        </div>
+      </div>
+
+      <div class="post-actions">
+        <button class="post-action-btn" onclick="toggleLike(this)" title="Curtir">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <button class="post-action-btn" title="Comentar" onclick="this.closest('.post-card').querySelector('.post-comments-preview').scrollIntoView({behavior:'smooth'})">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <button class="post-action-btn" title="Compartilhar" onclick="sharePost(this)">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+        <button class="post-action-btn post-save-btn" title="Salvar" onclick="toggleSave(this)">
+          <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+
+      <div class="post-likes">🤍 Seja o primeiro a curtir</div>
+
+      <div class="post-caption">
+        <strong>@usuario_do_escritor</strong>
+        <!--
+          ✅ LEGENDA DO POST 1
+          Sugestões:
+          - Uma citação famosa do autor
+          - Apresentação da obra principal
+          - Fato curioso sobre a vida do escritor
+          - Reflexão sobre o período literário
+          Use emojis! 📚✍️🌟
+        -->
+        Escreva aqui a legenda do primeiro post. Fale sobre o autor, sua época, sua importância para a literatura brasileira ou apresente uma de suas obras mais famosas. Quanto mais criativo, melhor! ✨
+      </div>
+
+      <div class="post-tags">
+        <!--
+          ✅ EDITE AS HASHTAGS do post 1
+          Exemplo: #Realismo #MachadoDeAssis #DomCasmurro
+        -->
+        <span class="tag">#LiteraturaBrasileira</span>
+        <span class="tag">#PeriodoLiterario</span>
+        <span class="tag">#NomeDoEscritor</span>
+        <span class="tag">#Literatura</span>
+      </div>
+
+      <div class="post-comments-preview">Ver todos os comentários</div>
+
+      <div class="post-comment">
+        <!--
+          ✅ EDITE OS COMENTÁRIOS
+          Podem ser comentários de colegas, do professor, ou personagens fictícios da época!
+        -->
+        <strong>@prof_literatura</strong>
+        Ótimo post! Que obra incrível! 📚
+      </div>
+
+      <div class="post-date">Há 3 dias</div><!-- ✅ Ajuste a data -->
+    </div>
+    <!-- fim post 1 -->
+
+
+    <!-- ══════════════════════════════════════════════════════════
+         POST 2
+         ══════════════════════════════════════════════════════════ -->
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-avatar">
+          <div class="post-avatar-inner">?<!-- ✅ Inicial ou <img src="..."> --></div>
+        </div>
+        <div class="post-user-info">
+          <div class="post-username">
+            @usuario_do_escritor<!-- ✅ -->
+            <span class="periodo-badge">Período</span><!-- ✅ -->
+          </div>
+          <div class="post-location">Cidade, Estado · Período</div><!-- ✅ -->
+        </div>
+        <div class="post-menu">···</div>
+      </div>
+
+      <!--
+        ✅ IMAGEM DO POST 2
+        Sugestão: capa de uma obra específica, manuscrito, ou ilustração da época
+      -->
+      <div class="post-image-placeholder">
+        <div class="post-image-placeholder-content">
+          <div class="placeholder-icon">🖼️</div>
+          <div class="placeholder-text">Imagem do Post 2</div>
+          <div class="placeholder-hint">&lt;img src="url" class="post-image"&gt;</div>
+        </div>
+      </div>
+
+      <div class="post-actions">
+        <button class="post-action-btn" onclick="toggleLike(this)" title="Curtir">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <button class="post-action-btn" title="Comentar">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <button class="post-action-btn" title="Compartilhar" onclick="sharePost(this)">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+        <button class="post-action-btn post-save-btn" title="Salvar" onclick="toggleSave(this)">
+          <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+
+      <div class="post-likes">🤍 Seja o primeiro a curtir</div>
+
+      <div class="post-caption">
+        <strong>@usuario_do_escritor</strong>
+        <!-- ✅ LEGENDA DO POST 2: Uma obra específica, poema, trecho famoso ou momento da vida do escritor -->
+        Aqui vai a legenda do segundo post. Pode ser uma obra específica, um poema, um trecho famoso ou um momento histórico da vida do escritor. Use emojis para deixar mais dinâmico! 🖊️📖
+      </div>
+
+      <div class="post-tags">
+        <!-- ✅ EDITE AS HASHTAGS -->
+        <span class="tag">#LiteraturaBrasileira</span>
+        <span class="tag">#PeriodoLiterario</span>
+        <span class="tag">#NomeDoEscritor</span>
+      </div>
+
+      <div class="post-comments-preview">Ver todos os comentários</div>
+
+      <div class="post-comment">
+        <strong>@leitor_apaixonado</strong>
+        Adorei esse autor! Muito representativo do período. 🌟
+      </div>
+
+      <div class="post-date">Há 5 dias</div>
+    </div>
+    <!-- fim post 2 -->
+
+
+    <!-- ══════════════════════════════════════════════════════════
+         POST 3
+         ══════════════════════════════════════════════════════════ -->
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-avatar">
+          <div class="post-avatar-inner">?<!-- ✅ --></div>
+        </div>
+        <div class="post-user-info">
+          <div class="post-username">
+            @usuario_do_escritor<!-- ✅ -->
+            <span class="periodo-badge">Período</span><!-- ✅ -->
+          </div>
+          <div class="post-location">Cidade, Estado · Período</div><!-- ✅ -->
+        </div>
+        <div class="post-menu">···</div>
+      </div>
+
+      <!--
+        ✅ IMAGEM DO POST 3
+        Sugestão: influências do escritor, relação com outros autores, impacto social
+      -->
+      <div class="post-image-placeholder">
+        <div class="post-image-placeholder-content">
+          <div class="placeholder-icon">🖼️</div>
+          <div class="placeholder-text">Imagem do Post 3</div>
+          <div class="placeholder-hint">&lt;img src="url" class="post-image"&gt;</div>
+        </div>
+      </div>
+
+      <div class="post-actions">
+        <button class="post-action-btn" onclick="toggleLike(this)" title="Curtir">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <button class="post-action-btn" title="Comentar">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <button class="post-action-btn" title="Compartilhar" onclick="sharePost(this)">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+        <button class="post-action-btn post-save-btn" title="Salvar" onclick="toggleSave(this)">
+          <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+
+      <div class="post-likes">🤍 Seja o primeiro a curtir</div>
+
+      <div class="post-caption">
+        <strong>@usuario_do_escritor</strong>
+        <!-- ✅ LEGENDA DO POST 3: Legado, influências, impacto na sociedade brasileira -->
+        Terceiro post! Explore um aspecto diferente: influências que o escritor recebeu, legado que deixou, relação com outros autores da época ou impacto na sociedade brasileira. 🇧🇷📚
+      </div>
+
+      <div class="post-tags">
+        <!-- ✅ EDITE AS HASHTAGS -->
+        <span class="tag">#LiteraturaBrasileira</span>
+        <span class="tag">#Cultura</span>
+        <span class="tag">#NomeDoEscritor</span>
+        <span class="tag">#Classicos</span>
+      </div>
+
+      <div class="post-comments-preview">Ver todos os comentários</div>
+
+      <div class="post-comment">
+        <strong>@turma_literatura</strong>
+        Que trabalho incrível! Parabéns! 🎉
+      </div>
+
+      <div class="post-date">Há 1 semana</div>
+    </div>
+    <!-- fim post 3 -->
+
+    <!--
+    ┌─────────────────────────────────────────────────────────┐
+    │  ✅ ADICIONAR MAIS POSTS?                               │
+    │  Copie um bloco "post-card" acima e cole aqui,         │
+    │  depois edite o conteúdo. Não esqueça de atualizar     │
+    │  o número em "stat-posts" no perfil!                   │
+    └─────────────────────────────────────────────────────────┘
+    -->
+
+  </div>
+  <!-- fim posts-feed -->
+
+  <!-- RODAPÉ -->
+  <div class="feed-footer">
+    <strong>Literatura Brasileira</strong> — Feed Interativo<br>
+    <!--
+      ✅ Edite: coloque o nome da turma e da escola
+      Exemplo: Turma 3°A · Escola Estadual João XXIII · 2025
+    -->
+    Projeto criado pela turma · Escola e Ano<br>
+    <span style="opacity: 0.4; font-size: 10px;">✏️ Edite este arquivo HTML para personalizar</span>
+  </div>
+
+</div><!-- fim insta-wrapper -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAIS DE DESTAQUE — ✅ EDITE O CONTEÚDO DENTRO DAS TAGS
+     Não altere a estrutura dos divs, apenas o texto interno
+     ══════════════════════════════════════════════════════════ -->
+
+<!-- MODAL: OBRAS -->
+<div class="modal-overlay" id="modal-obras" onclick="closeModalOnOverlay(event, this)">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-icon">🖊️</div>
+      <div>
+        <div class="modal-title">Principais Obras</div>
+        <!--
+          ✅ Subtítulo do modal — exemplo: "A bibliografia de Machado de Assis"
+        -->
+        <div class="modal-subtitle">A bibliografia do escritor</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('obras')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!--
+        ✅ PREENCHA ESTE MODAL COM AS OBRAS DO ESCRITOR
+        Copie e cole mais blocos "modal-obra-card" conforme necessário.
+
+        ESTRUTURA DE CADA OBRA:
+        <div class="modal-obra-card">
+          <div class="modal-obra-emoji">📘</div> (escolha um emoji adequado)
+          <div class="modal-obra-info">
+            <div class="modal-obra-title">Título da Obra (Ano)</div>
+            <div class="modal-obra-desc">Breve descrição da obra: gênero, tema, importância.</div>
+          </div>
+        </div>
+      -->
+
+      <div class="modal-section">
+        <div class="modal-section-title">Romances</div>
+
+        <div class="modal-obra-card">
+          <div class="modal-obra-emoji">📘</div>
+          <div class="modal-obra-info">
+            <div class="modal-obra-title">Título da Obra 1 (Ano)</div>
+            <div class="modal-obra-desc">Descrição da obra: gênero, temas principais, importância para a literatura brasileira.</div>
+          </div>
+        </div>
+
+        <div class="modal-obra-card">
+          <div class="modal-obra-emoji">📗</div>
+          <div class="modal-obra-info">
+            <div class="modal-obra-title">Título da Obra 2 (Ano)</div>
+            <div class="modal-obra-desc">Descrição da obra: personagens, enredo resumido, relevância histórica.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Poesia / Contos</div>
+
+        <div class="modal-obra-card">
+          <div class="modal-obra-emoji">📜</div>
+          <div class="modal-obra-info">
+            <div class="modal-obra-title">Título da Obra 3 (Ano)</div>
+            <div class="modal-obra-desc">Descrição: gênero, temáticas, por que é importante conhecer.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: VIDA -->
+<div class="modal-overlay" id="modal-vida" onclick="closeModalOnOverlay(event, this)">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-icon">🏛️</div>
+      <div>
+        <div class="modal-title">Biografia</div>
+        <!--
+          ✅ Subtítulo — exemplo: "A trajetória de vida de Machado de Assis"
+        -->
+        <div class="modal-subtitle">A trajetória de vida do escritor</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('vida')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!--
+        ✅ PREENCHA COM A BIOGRAFIA DO ESCRITOR
+        Use a linha do tempo (timeline) para fatos importantes da vida dele.
+        Copie mais blocos "modal-timeline-item" conforme necessário.
+      -->
+
+      <div class="modal-section">
+        <div class="modal-section-title">Linha do Tempo</div>
+
+        <div class="modal-timeline-item">
+          <div class="modal-timeline-year">1800</div><!-- ✅ Ano de nascimento -->
+          <div class="modal-timeline-text">✅ Nasce em [Cidade, Estado]. Descreva o contexto familiar e social do nascimento.</div>
+        </div>
+
+        <div class="modal-timeline-item">
+          <div class="modal-timeline-year">1820</div><!-- ✅ Ano importante -->
+          <div class="modal-timeline-text">✅ Evento importante da juventude. Primeiros contatos com a literatura.</div>
+        </div>
+
+        <div class="modal-timeline-item">
+          <div class="modal-timeline-year">1840</div><!-- ✅ -->
+          <div class="modal-timeline-text">✅ Publica sua primeira obra. Descreva a repercussão e a importância.</div>
+        </div>
+
+        <div class="modal-timeline-item">
+          <div class="modal-timeline-year">1860</div><!-- ✅ -->
+          <div class="modal-timeline-text">✅ Reconhecimento nacional. Participa de movimentos literários ou políticos da época.</div>
+        </div>
+
+        <div class="modal-timeline-item">
+          <div class="modal-timeline-year">1900</div><!-- ✅ Ano de falecimento -->
+          <div class="modal-timeline-text">✅ Falece em [Cidade]. Descreva o legado deixado para a literatura brasileira.</div>
+        </div>
+
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Curiosidades</div>
+        <p>✅ Escreva aqui curiosidades sobre a vida pessoal do escritor: família, profissão além da literatura, hobbies, amizades famosas, etc.</p>
+        <p>✅ Mais uma curiosidade interessante que os alunos possam se identificar ou achar surpreendente.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: FRASES -->
+<div class="modal-overlay" id="modal-frases" onclick="closeModalOnOverlay(event, this)">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-icon">💬</div>
+      <div>
+        <div class="modal-title">Frases Marcantes</div>
+        <div class="modal-subtitle">As melhores citações do escritor</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('frases')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!--
+        ✅ PREENCHA COM AS FRASES/CITAÇÕES DO ESCRITOR
+        Use o bloco "modal-quote" para cada citação.
+        Adicione após cada citação de qual obra ela veio.
+      -->
+
+      <div class="modal-section">
+        <div class="modal-section-title">Citações das Obras</div>
+
+        <div class="modal-quote">
+          ✅ "Coloque aqui uma citação famosa do escritor, entre aspas."
+        </div>
+        <p style="font-size:11px; color: var(--text-muted); margin-top: -6px; margin-bottom: 14px;">— ✅ Nome da Obra, Ano</p>
+
+        <div class="modal-quote">
+          ✅ "Segunda citação marcante do escritor. Escolha uma que represente bem o estilo literário dele."
+        </div>
+        <p style="font-size:11px; color: var(--text-muted); margin-top: -6px; margin-bottom: 14px;">— ✅ Nome da Obra, Ano</p>
+
+        <div class="modal-quote">
+          ✅ "Terceira citação. Pode ser um verso de poema, trecho de conto ou romance."
+        </div>
+        <p style="font-size:11px; color: var(--text-muted); margin-top: -6px; margin-bottom: 14px;">— ✅ Nome da Obra, Ano</p>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CONTEXTO HISTÓRICO -->
+<div class="modal-overlay" id="modal-contexto" onclick="closeModalOnOverlay(event, this)">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-icon">📜</div>
+      <div>
+        <div class="modal-title">Contexto Histórico</div>
+        <div class="modal-subtitle">Brasil e mundo na época do escritor</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('contexto')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!--
+        ✅ PREENCHA COM O CONTEXTO HISTÓRICO DO PERÍODO
+        Fale sobre: o que acontecia no Brasil e no mundo enquanto o escritor vivia?
+        Que movimentos sociais, políticos e culturais influenciaram sua obra?
+      -->
+
+      <div class="modal-section">
+        <div class="modal-section-title">O Brasil na época</div>
+        <p>✅ Descreva o Brasil no período em que o escritor viveu: era Imperial? República? Que transformações sociais e políticas aconteciam?</p>
+        <p>✅ Como essas transformações aparecem ou influenciam a obra do escritor?</p>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">O Movimento Literário</div>
+        <p>✅ Explique o período literário ao qual o escritor pertence: Romantismo, Realismo, Naturalismo, Parnasianismo, Simbolismo, Modernismo...</p>
+        <p>✅ Quais são as principais características desse movimento? Como elas aparecem na obra do escritor escolhido?</p>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Outros Autores do Período</div>
+        <p>✅ Cite outros escritores contemporâneos e como se relacionavam com o escritor escolhido.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: LEGADO -->
+<div class="modal-overlay" id="modal-legado" onclick="closeModalOnOverlay(event, this)">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-icon">🏆</div>
+      <div>
+        <div class="modal-title">Prêmios e Legado</div>
+        <div class="modal-subtitle">A importância do escritor até hoje</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('legado')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!--
+        ✅ PREENCHA COM PRÊMIOS, RECONHECIMENTOS E LEGADO DO ESCRITOR
+      -->
+
+      <div class="modal-section">
+        <div class="modal-section-title">Reconhecimentos em Vida</div>
+        <p>✅ Descreva prêmios, cargos importantes, honrarias e reconhecimentos que o escritor recebeu durante a vida.</p>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Influência na Literatura Brasileira</div>
+        <p>✅ Quais escritores foram influenciados por ele? Como sua obra moldou a literatura que viria depois?</p>
+        <p>✅ Quais temas ou técnicas literárias ele introduziu ou popularizou no Brasil?</p>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Presente nos Dias de Hoje</div>
+        <p>✅ Suas obras são estudadas em escolas e vestibulares? Foram adaptadas para cinema, teatro ou TV? Fale sobre isso!</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--
+  ✅ Para adicionar um NOVO MODAL DE DESTAQUE:
+  1. Copie um bloco modal-overlay acima
+  2. Mude o id="modal-NOMEDESTAQUE"
+  3. Mude os botões onclick para closeModal('NOMEDESTAQUE')
+  4. Preencha o conteúdo
+  5. No HTML do destaque, mude onclick para openHighlight('NOMEDESTAQUE')
+-->
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL DE STORIES (TELA CHEIA) — NÃO EDITE ESTA ESTRUTURA
+     ══════════════════════════════════════════════════════════ -->
+<div class="story-modal-overlay" id="story-modal" onclick="handleStoryTap(event)">
+  <div class="story-modal-inner">
+
+    <!-- barra de progresso -->
+    <div class="story-progress-bar" id="story-progress-bar"></div>
+
+    <!-- cabeçalho do story -->
+    <div class="story-modal-header">
+      <div class="story-modal-avatar" id="story-modal-avatar">📖</div>
+      <div class="story-modal-name" id="story-modal-name">Nome do escritor</div>
+      <button class="story-modal-close" onclick="closeStoryModal(event)">✕</button>
+    </div>
+
+    <!-- conteúdo da mídia -->
+    <div class="story-media-container" id="story-media-container"></div>
+
+    <!-- legenda -->
+    <div class="story-modal-caption" id="story-modal-caption"></div>
+
+    <!-- áreas de toque (não clicáveis visualmente) -->
+    <div class="story-nav-tap prev" id="story-tap-prev"></div>
+    <div class="story-nav-tap next" id="story-tap-next"></div>
+
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
